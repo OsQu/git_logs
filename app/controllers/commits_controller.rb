@@ -1,10 +1,10 @@
 class CommitsController < ApplicationController
   def index
-    render json: Commit.all
+    render json: Commit.all.to_json(:include => :author)
   end
 
   def show
-    render json: Commit.find(params[:id])
+    render json: Commit.find(params[:id]).to_json(:include => :author)
   end
 
   def create
@@ -30,7 +30,7 @@ class CommitsController < ApplicationController
 
     commits = Commit.includes(:author).where(search_params)
 
-    render json: commits
+    render json: commits.to_json(:include => :author)
   end
 
   private
