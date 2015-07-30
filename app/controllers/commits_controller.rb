@@ -20,6 +20,19 @@ class CommitsController < ApplicationController
     end
   end
 
+  def search
+    search_params = params.symbolize_keys
+    search_params.slice!(:message, :email)
+
+    if email = search_params.delete(:email)
+      search_params.merge!('authors.email' => email)
+    end
+
+    commits = Commit.includes(:author).where(search_params)
+
+    render json: commits
+  end
+
   private
 
   def commit_params
